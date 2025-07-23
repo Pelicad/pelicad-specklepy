@@ -7,7 +7,7 @@ from specklepy.core.api.models.graphql_base_model import GraphQLBaseModel
 from specklepy.core.api.resource import ResourceBase
 from gql import gql
 from specklepy.core.api.responses import DataResponse
-from extended_model_resource import AutomateRunStatus, ExtendedModelResource
+from .extended_model_resource import AutomateRunStatus, ExtendedModelResource
 
 logger = logging.getLogger("Pipeline")
 NAME = 'automation'
@@ -71,7 +71,8 @@ class AutomationResource(ResourceBase):
             server_version=client.server.server_version,
         )
 
-    def get(self, project_id: str, model_id: str, model_version_id: str, automation_id: Optional[str]) -> FunctionRunData:
+    def get(self, project_id: str, model_id: str, model_version_id: str,
+            automation_id: Optional[str] = None) -> FunctionRunData:
         query = gql("""
                         query AutomationData($modelId: String!, $projectId: String!, $versionId: String!) {
                           project(id: $projectId) {
@@ -103,7 +104,8 @@ class AutomationResource(ResourceBase):
                           if automation_id is None or a.automationId == automation_id)
         return next(run for run in automation.functionRuns if run.status == AutomateRunStatus.Succeeded)
 
-    def try_get(self, project_id: str, model_id: str, model_version_id: str, automation_id: Optional[str]) -> Optional[FunctionRunData]:
+    def try_get(self, project_id: str, model_id: str, model_version_id: str,
+                automation_id: Optional[str] = None) -> Optional[FunctionRunData]:
         try:
             return self.get(project_id, model_id, model_version_id, automation_id)
         except Exception as e:
@@ -114,7 +116,7 @@ class AutomationResource(ResourceBase):
     def get_last_successful_automation(speckle_client: SpeckleClient,
                                        model_id: str,
                                        project_id: str,
-                                       automation_id: Optional[str]) -> Optional[AutomationRunData]:
+                                       automation_id: Optional[str] = None) -> Optional[FunctionRunData]:
         model = ExtendedModelResource(speckle_client)
         model_data = model.get_with_versions(model_id,
                                              project_id, versions_limit=50)
