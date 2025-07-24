@@ -73,6 +73,10 @@ class AutomationResource(ResourceBase):
 
     def get(self, project_id: str, model_id: str, model_version_id: str,
             automation_id: Optional[str] = None) -> FunctionRunData:
+        logger.info("Test info")
+        logger.warning("Test Warning")
+        logger.error("Test error")
+        logger.exception("Test exception")
         query = gql("""
                         query AutomationData($modelId: String!, $projectId: String!, $versionId: String!) {
                           project(id: $projectId) {
@@ -109,6 +113,7 @@ class AutomationResource(ResourceBase):
         try:
             return self.get(project_id, model_id, model_version_id, automation_id)
         except Exception as e:
+            logger.info(f"Failed to get automation [{project_id}, {model_id}, {model_version_id}, {automation_id}]")
             logger.error(f"Failed to get automation [{project_id}, {model_id}, {model_version_id}, {automation_id}]", exc_info=e)
             return None
 
