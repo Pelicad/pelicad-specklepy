@@ -73,10 +73,6 @@ class AutomationResource(ResourceBase):
 
     def get(self, project_id: str, model_id: str, model_version_id: str,
             automation_id: Optional[str] = None) -> FunctionRunData:
-        logger.info("Test info")
-        logger.warning("Test Warning")
-        logger.error("Test error")
-        logger.exception("Test exception")
         query = gql("""
                         query AutomationData($modelId: String!, $projectId: String!, $versionId: String!) {
                           project(id: $projectId) {
@@ -110,6 +106,11 @@ class AutomationResource(ResourceBase):
 
     def try_get(self, project_id: str, model_id: str, model_version_id: str,
                 automation_id: Optional[str] = None) -> Optional[FunctionRunData]:
+        logger.info("Test info")
+        logger.warning("Test Warning")
+        logger.error("Test error")
+        logger.exception("Test exception")
+        
         try:
             return self.get(project_id, model_id, model_version_id, automation_id)
         except Exception as e:
@@ -144,9 +145,12 @@ class AutomationResource(ResourceBase):
 
         data = None
         if success_version_id is not None:
+            logger.info(f"Getting automation for version {success_version_id}.")
             automation = AutomationResource(speckle_client)
             data = automation.try_get(project_id,
                                       model_id,
                                       success_version_id,
                                       automation_id)
+        else:
+            logger.info("No successful previous versions available.")
         return data
