@@ -154,3 +154,7 @@ class AutomationResource(ResourceBase):
         else:
             logger.info("No successful previous versions available.")
         return data
+
+    @staticmethod
+    def get_version():
+        return "1.0.0"
