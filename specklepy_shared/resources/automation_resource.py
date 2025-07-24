@@ -109,7 +109,7 @@ class AutomationResource(ResourceBase):
         try:
             return self.get(project_id, model_id, model_version_id, automation_id)
         except Exception as e:
-            logger.error(e)
+            logger.error(f"Failed to get automation [{project_id}, {model_id}, {model_version_id}, {automation_id}]", exc_info=e)
             return None
 
     @staticmethod
