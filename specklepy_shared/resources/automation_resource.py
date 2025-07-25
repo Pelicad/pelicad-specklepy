@@ -106,15 +106,9 @@ class AutomationResource(ResourceBase):
 
     def try_get(self, project_id: str, model_id: str, model_version_id: str,
                 automation_id: Optional[str] = None) -> Optional[FunctionRunData]:
-        logger.info("Test info")
-        logger.warning("Test Warning")
-        logger.error("Test error")
-        logger.exception("Test exception")
-        
         try:
             return self.get(project_id, model_id, model_version_id, automation_id)
         except Exception as e:
-            logger.info(f"Failed to get automation [{project_id}, {model_id}, {model_version_id}, {automation_id}]")
             logger.error(f"Failed to get automation [{project_id}, {model_id}, {model_version_id}, {automation_id}]", exc_info=e)
             return None
 
@@ -154,7 +148,3 @@ class AutomationResource(ResourceBase):
         else:
             logger.info("No successful previous versions available.")
         return data
-
-    @staticmethod
-    def get_version():
-        return "1.0.0"
