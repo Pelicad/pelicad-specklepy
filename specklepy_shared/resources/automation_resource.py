@@ -18,7 +18,7 @@ class AutomationRunObjectResult(GraphQLBaseModel):
     message: Optional[str]
     metadata: Optional[Any]
     visualOverrides: Optional[Any]
-    objectAppIds: Dict[str, str]
+    objectAppIds: Dict[str, str | None]
 
 
 class FunctionRunDataResultValue(GraphQLBaseModel):
